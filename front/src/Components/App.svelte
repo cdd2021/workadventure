@@ -23,6 +23,7 @@
     import AudioPlaying from "./UI/AudioPlaying.svelte";
     import {soundPlayingStore} from "../Stores/SoundPlayingStore";
     import ErrorDialog from "./UI/ErrorDialog.svelte";
+    import VideoOverlay from "./Video/VideoOverlay.svelte";
 
     export let game: Game;
 </script>
@@ -68,6 +69,7 @@
     -->
     {#if $gameOverlayVisibilityStore}
         <div>
+            <VideoOverlay></VideoOverlay>
             <MyCamera></MyCamera>
             <CameraControls></CameraControls>
         </div>

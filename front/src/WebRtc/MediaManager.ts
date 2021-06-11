@@ -65,7 +65,7 @@ export class MediaManager {
             }
         });
 
-        let isScreenSharing = false;
+        //let isScreenSharing = false;
         screenSharingLocalStreamStore.subscribe((result) => {
             if (result.type === 'error') {
                 console.error(result.error);
@@ -75,7 +75,7 @@ export class MediaManager {
                 return;
             }
 
-            if (result.stream !== null) {
+            /*if (result.stream !== null) {
                 isScreenSharing = true;
                 this.addScreenSharingActiveVideo('me', DivImportance.Normal);
                 HtmlUtils.getElementByIdOrFail<HTMLVideoElement>('screen-sharing-me').srcObject = result.stream;
@@ -84,7 +84,7 @@ export class MediaManager {
                     isScreenSharing = false;
                     this.removeActiveScreenSharingVideo('me');
                 }
-            }
+            }*/
 
         });
 
@@ -134,7 +134,7 @@ export class MediaManager {
         gameOverlayVisibilityStore.hideGameOverlay();
     }
 
-    addActiveVideo(user: UserSimplePeerInterface, userName: string = ""){
+    /*addActiveVideo(user: UserSimplePeerInterface, userName: string = ""){
         const userId = ''+user.userId
 
         userName = userName.toUpperCase();
@@ -194,7 +194,7 @@ export class MediaManager {
         layoutManager.add(divImportance, userId, html);
 
         this.remoteVideo.set(userId, HtmlUtils.getElementByIdOrFail<HTMLVideoElement>(userId));
-    }
+    }*/
 
     private getScreenSharingId(userId: string): string {
         return `screen-sharing-${userId}`;
@@ -242,19 +242,12 @@ export class MediaManager {
         const blockLogoElement = HtmlUtils.getElementByIdOrFail<HTMLImageElement>('blocking-'+userId);
         show ? blockLogoElement.classList.add('active') : blockLogoElement.classList.remove('active');
     }
-    addStreamRemoteVideo(userId: string, stream : MediaStream): void {
+    /*addStreamRemoteVideo(userId: string, stream : MediaStream): void {
         const remoteVideo = this.remoteVideo.get(userId);
         if (remoteVideo === undefined) {
             throw `Unable to find video for ${userId}`;
         }
         remoteVideo.srcObject = stream;
-
-        //FIX ME SOUNDMETER: check stalability of sound meter calculation
-        //sound metter
-        /*const soundMeter = new SoundMeter();
-        soundMeter.connectToSource(stream, new AudioContext());
-        this.soundMeters.set(userId, soundMeter);
-        this.soundMeterElements.set(userId, HtmlUtils.getElementByIdOrFail<HTMLImageElement>('soundMeter-'+userId));*/
     }
     addStreamRemoteScreenSharing(userId: string, stream : MediaStream){
         // In the case of screen sharing (going both ways), we may need to create the HTML element if it does not exist yet
@@ -264,23 +257,18 @@ export class MediaManager {
         }
 
         this.addStreamRemoteVideo(this.getScreenSharingId(userId), stream);
-    }
+    }*/
 
     removeActiveVideo(userId: string){
-        layoutManager.remove(userId);
-        this.remoteVideo.delete(userId);
-
-        //FIX ME SOUNDMETER: check stalability of sound meter calculation
-        /*this.soundMeters.get(userId)?.stop();
-        this.soundMeters.delete(userId);
-        this.soundMeterElements.delete(userId);*/
+        //layoutManager.remove(userId);
+        //this.remoteVideo.delete(userId);
 
         //permit to remove user in discussion part
         this.removeParticipant(userId);
     }
-    removeActiveScreenSharingVideo(userId: string) {
+    /*removeActiveScreenSharingVideo(userId: string) {
         this.removeActiveVideo(this.getScreenSharingId(userId))
-    }
+    }*/
 
     isConnecting(userId: string): void {
         const connectingSpinnerDiv = this.getSpinner(userId);
