@@ -15,6 +15,9 @@ import {
     JITSI_PRIVATE_MODE,
     MAX_PER_GROUP,
     POSITION_DELAY,
+    // Customization
+    CALLOUT_URL,
+    CALLOUT_TIMER,
 } from "../../Enum/EnvironmentVariable";
 import type {
     ITiledMap,
@@ -133,6 +136,10 @@ interface DeleteGroupEventInterface {
 const defaultStartLayerName = 'start';
 
 export class GameScene extends DirtyScene implements CenterListener {
+
+    // Customization
+    private irq: NodeJS.Timeout = setTimeout(()=>{},1);
+
     Terrains : Array<Phaser.Tilemaps.Tileset>;
     CurrentPlayer!: Player;
     MapPlayers!: Phaser.Physics.Arcade.Group;
@@ -211,6 +218,7 @@ export class GameScene extends DirtyScene implements CenterListener {
         this.connectionAnswerPromise = new Promise<RoomJoinedMessageInterface>((resolve, reject): void => {
             this.connectionAnswerPromiseResolve = resolve;
         });
+
     }
 
     //hook preload scene
@@ -388,6 +396,43 @@ export class GameScene extends DirtyScene implements CenterListener {
 
     //hook create scene
     create(): void {
+
+        // Customization (Callout)
+        let msg = "";
+        let irqid = "";
+        const popup = document.getElementById("mypopup");
+        function callout() {
+            console.log("Starting callout (interval id " + irqid + ") on " + CALLOUT_URL);
+            fetch(CALLOUT_URL,{
+              method: "GET"
+            }).then(function(res){
+                if(res.status==404){
+                    console.log("No callout message found.");
+                    if (popup != undefined){
+                        popup.innerHTML = "";
+                        popup.style["visibility"] = "hidden";
+                    }
+                }
+                if(res.status==200){
+                    console.log("Callout message found.");
+                    res.text().then(function(text){
+                        if (msg != text){
+                            console.log("It is a new callout message.");
+                            msg = text;
+                            if (popup != undefined){
+                                popup.innerHTML = msg;
+                                popup.style["visibility"] = "visible";
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        this.irq = setInterval(callout,CALLOUT_TIMER);
+        irqid = (this.irq) as unknown as string;
+        console.log("Setting callout interval (interval id " + irqid +"; " + CALLOUT_TIMER + "ms; " + CALLOUT_URL + ")");
+        // Customization (Callout) End
+
         this.trackDirtyAnims();
 
         gameManager.gameSceneIsCreated(this);
@@ -941,6 +986,13 @@ ${escapedMessage}
     private onMapExit(exitKey: string) {
         if (this.mapTransitioning) return;
         this.mapTransitioning = true;
+
+        // Customization
+        console.log("Clear callout interval (interval id "+ this.irq +")");
+        if (this.irq != undefined){
+            window.clearInterval(this.irq);
+        }
+
         const {roomId, hash} = Room.getIdFromIdentifier(exitKey, this.MapUrlFile, this.instance);
         if (!roomId) throw new Error('Could not find the room from its exit key: '+exitKey);
         urlManager.pushStartLayerNameToUrl(hash);

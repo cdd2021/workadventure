@@ -15,8 +15,11 @@ const MAX_EXTRAPOLATION_TIME = 100; // Extrapolate a maximum of 250ms if no new 
 export const MAX_USERNAME_LENGTH = parseInt(process.env.MAX_USERNAME_LENGTH || '') || 8;
 export const MAX_PER_GROUP = parseInt(process.env.MAX_PER_GROUP || '4');
 export const DISPLAY_TERMS_OF_USE = process.env.DISPLAY_TERMS_OF_USE == 'true';
-
 export const isMobile = ():boolean => ( ( window.innerWidth <= 800 ) || ( window.innerHeight <= 600 ) );
+
+// Customization
+const CALLOUT_URL = process.env.CALLOUT_URL || 'http://localhost:8000/callout.txt';
+const CALLOUT_TIMER = parseInt(process.env.CALLOUT_TIMER  || '60000');
 
 export {
     DEBUG_MODE,
@@ -32,5 +35,8 @@ export {
     TURN_USER,
     TURN_PASSWORD,
     JITSI_URL,
-    JITSI_PRIVATE_MODE
+    JITSI_PRIVATE_MODE,
+    // Customization
+    CALLOUT_URL,
+    CALLOUT_TIMER
 }

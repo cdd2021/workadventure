@@ -32,6 +32,22 @@
         <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
 
         <title>WorkAdventure</title>
+
+        <!-- Customization -->
+        <style>
+        .mypopup {
+    		position: absolute;
+    		left: 50%;
+    		top: 50%;
+    		-webkit-transform: translate(-50%, -50%);
+    		transform: translate(-50%, -50%);
+            visibility: hidden;
+            font-family: arial;
+            font-size: 64px;
+            color: #ffffff;
+    	}
+        </style>
+        
     </head>
     <body id="body" style="margin: 0; background-color: #000">
         <div class="main-container" id="main-container">
@@ -94,6 +110,9 @@
         <audio id="report-message">
             <source src="/resources/objects/report-message.mp3" type="audio/mp3">
         </audio>
+
+        <!-- Customization -->
+        <div id="mypopup" class="mypopup">n/a</div>
 
     </body>
 </html>
